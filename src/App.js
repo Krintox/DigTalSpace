@@ -7,6 +7,8 @@ import GeofencedPaymentPage from './components/GeofencedPaymentPage';
 import ShortPaymentLinkPage from './components/ShortPaymentLinkPage';
 import QRScannerPage from './components/QRScannerPage';
 import PaymentPage from './components/PaymentPage';
+import ProfilePage from './components/profilePage';
+import PageCreation from './components/createPage';
 import HomePage from './Home.js';
 import './App.css';
 
@@ -14,33 +16,19 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <header className="App-header">
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/digital-space">Digital Space</Link>
-              </li>
-              <li>
-                <Link to="/dynamic-qr">Dynamic QR</Link>
-              </li>
-              <li>
-                <Link to="/geofenced-payment">Geofenced Payment</Link>
-              </li>
-              <li>
-                <Link to="/short-payment-link">Short Payment Link</Link>
-              </li>
-              <li>
-                <Link to="/scanner-qr">QR Scanner</Link>
-              </li>
-              <li>
-                <Link to="/payment-page">Payment Page</Link>
-              </li>
-            </ul>
-          </nav>
+        <nav className="sidebar">
+          <Link to="/" className="nav-link">Home</Link>
+          <Link to="/digital-space" className="nav-link">Digital Space</Link>
+          <Link to="/dynamic-qr" className="nav-link">Dynamic QR</Link>
+          <Link to="/geofenced-payment" className="nav-link">Geofenced Payment</Link>
+          <Link to="/short-payment-link" className="nav-link">Short Payment Link</Link>
+          <Link to="/scanner-qr" className="nav-link">QR Scanner</Link>
+          <Link to="/payment-page" className="nav-link">Payment Page</Link>
+          <Link to="/profile-page" className="nav-link">Profile Page</Link>
+          <Link to="/PageCreation-page" className="nav-link">PageCreation Page</Link>
+        </nav>
 
+        <div className="content">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/digital-space" element={<DigitalSpacePage />} />
@@ -49,8 +37,10 @@ function App() {
             <Route path="/short-payment-link" element={<ShortPaymentLinkPage />} />
             <Route path="/scanner-qr" element={<QRScannerPage />} />
             <Route path="/payment-page" element={<PaymentPage />} />
+            <Route path="/profile-page" element={<ProfilePage />} />
+            <Route path="/PageCreation-page" element={<PageCreation />} />
           </Routes>
-        </header>
+        </div>
       </div>
     </Router>
   );

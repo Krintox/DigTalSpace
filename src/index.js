@@ -11,7 +11,7 @@ root.render(
   <React.StrictMode>
     <MetaMaskProvider debug={false} sdkOptions={{
       dappMetadata: {
-        name: "Your Dapp Name",
+        name: "DigTalSpace",
         url: window.location.href,
       }
       // Other options
