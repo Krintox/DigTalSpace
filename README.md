@@ -82,3 +82,8 @@ DigTalSpace proudly operates on a blockchain-based backend, offering enhanced se
 - 🌐 **Accessibility:** Enjoy responsive design, making DigTalSpace accessible across devices.
 
 Ready to embark on a journey where your digital world mirrors your uniqueness? Join DigTalSpace – where creation knows no bounds! 🚀🌌
+
+## Contributors
+
+- [Shashank Suggala](https://github.com/Krintox)
+- [Archit Patro](https://github.com/Archit-Patro)
