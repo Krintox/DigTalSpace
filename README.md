@@ -68,6 +68,3 @@ DigTalSpace is deployed on Polygon MATIC.
 
 - [Shashank Suggala](https://github.com/Krintox)
 - [Archit Patro](https://github.com/Archit-Patro)
-
-
-![DigTalSpace Universe](images/digtalspace-universe.png)
