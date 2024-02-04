@@ -1,5 +1,4 @@
-// src/components/DynamicQRPage.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import QRCode from "qrcode.react";
 import { useNavigate } from "react-router-dom";
@@ -9,41 +8,53 @@ const DynamicQRPage = ({ contract }) => {
   const [amount, setAmount] = useState("");
   const [reference, setReference] = useState("");
   const [description, setDescription] = useState("");
+  const [qrImage, setQrImage] = useState(null);
   const navigate = useNavigate();
 
-  const initiateTransaction = async () => {
-    // Add validation to ensure the amount is not empty
-    if (!amount.trim()) {
-      alert("Amount cannot be empty!");
-      return;
-    }
+  useEffect(() => {
+    generateQRImage();
+  }, [recipient, amount, reference, description]);
 
-    const transaction = await contract.initiateTransaction(
-      recipient,
-      ethers.utils.parseEther(amount),
-      reference,
-      description
-    ); // Replace with actual data
-    await transaction.wait();
-    alert("Transaction initiated!");
-
-    // Redirect to QR Scanner Page after initiating the transaction
-    navigate(`/qr-scanner?qrContent=${generateQRContent()}`);
-  };
-
-  // Function to generate the dynamic QR code content
   const generateQRContent = () => {
-    // Add validation to ensure the amount is not empty
     if (!amount.trim()) {
       return "";
     }
 
-    return JSON.stringify({
+    const qrData = {
       recipient,
-      amount: ethers.utils.parseEther(amount).toString(),
+      amount,
       reference,
       description,
-    });
+    };
+
+    return encodeURIComponent(JSON.stringify(qrData));
+  };
+
+  const generateQRImage = () => {
+    const qrContent = generateQRContent();
+    if (qrContent) {
+      const canvas = document.querySelector("canvas");
+      if (canvas) {
+        setQrImage(canvas.toDataURL("image/png"));
+      }
+    }
+  };
+
+  const copyImageToClipboard = () => {
+    if (qrImage) {
+      navigator.clipboard.writeText(qrImage).then(() => {
+        alert("QR code image copied to clipboard!");
+      });
+    }
+  };
+
+  const downloadImage = () => {
+    if (qrImage) {
+      const link = document.createElement("a");
+      link.href = qrImage;
+      link.download = "qrcode.png";
+      link.click();
+    }
   };
 
   return (
@@ -77,9 +88,14 @@ const DynamicQRPage = ({ contract }) => {
         placeholder="Description"
       />
       <br />
-      <button onClick={initiateTransaction}>Initiate Transaction</button>
+      <QRCode value={generateQRContent()} />
+
       <br />
-      {generateQRContent() && <QRCode value={generateQRContent()} />} {/* Render QR Code */}
+      {/* <button onClick={generateQRImage}>Generate QR Image</button> */}
+      <div>
+        <button onClick={copyImageToClipboard}>Copy Image</button>
+        <button onClick={downloadImage}>Download Image</button>
+      </div>
     </div>
   );
 };

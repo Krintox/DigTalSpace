@@ -1,138 +1,137 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract DigitalSpace {
-    address public owner;
-    mapping(address => DigitalSpaceInfo) public digitalSpaces;
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-    struct DigitalSpaceInfo {
+contract Community is ERC721 {
+    uint256 private tokenIdCounter;
+    address public admin;
+
+    struct Page {
+        string owner;
+        string content;
+        uint256[] postIds;
+        string uniqueCode;
         string avatar;
-        string backgroundColor;
+        string backgroundImage;
         string backgroundAudio;
-        string liveVideoStream;
-        mapping(string => bool) videos;
-        mapping(string => bool) audios;
-        mapping(address => bool) invitedPeople;
-        mapping(uint256 => Post) posts;
-        uint256 postCount;
     }
 
     struct Post {
+        address author;
+        string contentType; // "text", "video", "audio", etc.
         string content;
-        string postType; // Video, Audio, Text, etc.
     }
 
-    constructor() {
-        owner = msg.sender;
-    }
+    mapping(address => uint256) public pageIds;
+    mapping(uint256 => Page) public pages;
+    mapping(uint256 => Post) public posts;
 
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Not the owner");
+    event PageCreated(address indexed owner, uint256 pageId, string content, string uniqueCode);
+    event PostCreated(address indexed author, uint256 indexed pageId, uint256 postId, string contentType, string content);
+
+    modifier onlyAdmin() {
+        require(msg.sender == admin, "Not authorized");
         _;
     }
 
-    function connectToDigitalSpace() external {
-        require(bytes(digitalSpaces[msg.sender].avatar).length != 0, "Digital space not set up");
-        // Logic to connect to digital space
+    constructor() ERC721("CommunityPage", "CPAGE") {
+        admin = msg.sender;
+        tokenIdCounter = 1;
     }
 
-    function disconnectFromDigitalSpace() external {
-        // Logic to disconnect from digital space
+    function createPage(string memory _content) external {
+        require(pageIds[msg.sender] == 0, "Page already exists for the user");
+
+        Page storage newPage = pages[tokenIdCounter];
+        newPage.owner = "User"; // You can replace it with user input or integrate with a decentralized identity solution
+        newPage.content = _content;
+
+        // Generate a unique code (replace with your own logic)
+        newPage.uniqueCode = generateUniqueCode();
+
+        pageIds[msg.sender] = tokenIdCounter;
+        _safeMint(msg.sender, tokenIdCounter);
+
+        emit PageCreated(msg.sender, tokenIdCounter, _content, newPage.uniqueCode);
+        tokenIdCounter++;
     }
 
-    function postVideo(string memory videoHash) external {
-        require(bytes(digitalSpaces[msg.sender].avatar).length != 0, "Digital space not set up");
-        digitalSpaces[msg.sender].videos[videoHash] = true;
-        digitalSpaces[msg.sender].posts[digitalSpaces[msg.sender].postCount] = Post(videoHash, "Video");
-        digitalSpaces[msg.sender].postCount++;
+    function generateUniqueCode() internal view returns (string memory) {
+        // Implement your own logic to generate a unique code
+        // This is just an example; you might want to use a hash function or another mechanism
+        return string(abi.encodePacked("CODE", tokenIdCounter));
     }
 
-    function postAudio(string memory audioHash) external {
-        require(bytes(digitalSpaces[msg.sender].avatar).length != 0, "Digital space not set up");
-        digitalSpaces[msg.sender].audios[audioHash] = true;
-        digitalSpaces[msg.sender].posts[digitalSpaces[msg.sender].postCount] = Post(audioHash, "Audio");
-        digitalSpaces[msg.sender].postCount++;
+    function createPost(uint256 _pageId, string memory _contentType, string memory _content) external {
+        require(_pageId > 0 && _pageId <= tokenIdCounter, "Invalid pageId");
+        require(ownerOf(_pageId) == msg.sender, "You are not the owner of this page");
+
+        Post storage newPost = posts[tokenIdCounter];
+        newPost.author = msg.sender;
+        newPost.contentType = _contentType;
+        newPost.content = _content;
+
+        pages[_pageId].postIds.push(tokenIdCounter);
+
+        emit PostCreated(msg.sender, _pageId, tokenIdCounter, _contentType, _content);
+        tokenIdCounter++;
     }
 
-    function startEvent() external onlyOwner {
-        require(bytes(digitalSpaces[msg.sender].avatar).length != 0, "Digital space not set up");
-        // Logic to start a live video stream event
-        digitalSpaces[msg.sender].liveVideoStream = "liveVideoStreamURL"; // Placeholder URL
+    function getPagePostIds(uint256 _pageId) external view returns (uint256[] memory) {
+        return pages[_pageId].postIds;
     }
 
-    function endEvent() external onlyOwner {
-        // Logic to end the live video stream event
-        digitalSpaces[msg.sender].liveVideoStream = "";
+    function getPostDetails(uint256 _postId) external view returns (address, string memory, string memory) {
+        Post storage post = posts[_postId];
+        return (post.author, post.contentType, post.content);
     }
 
-    function setAvatar(string memory newAvatar) external {
-        digitalSpaces[msg.sender].avatar = newAvatar;
-        // Logic to set the avatar
-    }
-
-    function setBackground(string memory color, string memory audio) external {
-        digitalSpaces[msg.sender].backgroundColor = color;
-        digitalSpaces[msg.sender].backgroundAudio = audio;
-        // Logic to set the background color and audio
-    }
-
-    function invitePeople(address user) external onlyOwner {
-        digitalSpaces[msg.sender].invitedPeople[user] = true;
-        // Logic to invite people to the digital space
-    }
-
-    function getVideos() external view returns (string[] memory) {
-        // Logic to retrieve all videos
-        string[] memory videos = new string[](digitalSpaces[msg.sender].postCount);
-        uint256 videoCount = 0;
-        for (uint256 i = 0; i < digitalSpaces[msg.sender].postCount; i++) {
-            if (keccak256(abi.encodePacked(digitalSpaces[msg.sender].posts[i].postType)) == keccak256("Video")) {
-                videos[videoCount] = digitalSpaces[msg.sender].posts[i].content;
-                videoCount++;
-            }
+    function getPages() external view returns (Page[] memory) {
+        Page[] memory allPages = new Page[](tokenIdCounter - 1);
+        for (uint256 i = 1; i < tokenIdCounter; i++) {
+            allPages[i - 1] = pages[i];
         }
-        return videos;
+        return allPages;
     }
 
-    function getAudios() external view returns (string[] memory) {
-        // Logic to retrieve all audios
-        string[] memory audios = new string[](digitalSpaces[msg.sender].postCount);
-        uint256 audioCount = 0;
-        for (uint256 i = 0; i < digitalSpaces[msg.sender].postCount; i++) {
-            if (keccak256(abi.encodePacked(digitalSpaces[msg.sender].posts[i].postType)) == keccak256("Audio")) {
-                audios[audioCount] = digitalSpaces[msg.sender].posts[i].content;
-                audioCount++;
-            }
-        }
-        return audios;
+    function setAdmin(address _admin) external onlyAdmin {
+        admin = _admin;
     }
 
-    function getBackgroundAudio() external view returns (string memory) {
-        // Logic to retrieve the background audio
-        return digitalSpaces[msg.sender].backgroundAudio;
+    function setAvatar(uint256 _pageId, string memory _avatar) external {
+        require(_pageId > 0 && _pageId <= tokenIdCounter, "Invalid pageId");
+        require(ownerOf(_pageId) == msg.sender, "You are not the owner of this page");
+
+        pages[_pageId].avatar = _avatar;
     }
 
-    function getBackgroundColor() external view returns (string memory) {
-        // Logic to retrieve the background color
-        return digitalSpaces[msg.sender].backgroundColor;
+    function getAvatar(uint256 _pageId) external view returns (string memory) {
+        require(_pageId > 0 && _pageId <= tokenIdCounter, "Invalid pageId");
+        return pages[_pageId].avatar;
     }
 
-    function getAvatar() external view returns (string memory) {
-        // Logic to retrieve the avatar
-        return digitalSpaces[msg.sender].avatar;
+    function setBackgroundImage(uint256 _pageId, string memory _backgroundImage) external {
+        require(_pageId > 0 && _pageId <= tokenIdCounter, "Invalid pageId");
+        require(ownerOf(_pageId) == msg.sender, "You are not the owner of this page");
+
+        pages[_pageId].backgroundImage = _backgroundImage;
     }
 
-    function getLiveVideoStream() external view returns (string memory) {
-        // Logic to retrieve the live video stream
-        return digitalSpaces[msg.sender].liveVideoStream;
+    function getBackgroundImage(uint256 _pageId) external view returns (string memory) {
+        require(_pageId > 0 && _pageId <= tokenIdCounter, "Invalid pageId");
+        return pages[_pageId].backgroundImage;
     }
 
-    function getPosts() external view returns (Post[] memory) {
-        // Logic to retrieve all posts
-        Post[] memory posts = new Post[](digitalSpaces[msg.sender].postCount);
-        for (uint256 i = 0; i < digitalSpaces[msg.sender].postCount; i++) {
-            posts[i] = digitalSpaces[msg.sender].posts[i];
-        }
-        return posts;
+    function setBackgroundAudio(uint256 _pageId, string memory _backgroundAudio) external {
+        require(_pageId > 0 && _pageId <= tokenIdCounter, "Invalid pageId");
+        require(ownerOf(_pageId) == msg.sender, "You are not the owner of this page");
+
+        pages[_pageId].backgroundAudio = _backgroundAudio;
+    }
+
+    function getBackgroundAudio(uint256 _pageId) external view returns (string memory) {
+        require(_pageId > 0 && _pageId <= tokenIdCounter, "Invalid pageId");
+        return pages[_pageId].backgroundAudio;
     }
 }

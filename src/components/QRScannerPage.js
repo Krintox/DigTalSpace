@@ -1,32 +1,11 @@
-// src/components/QRScannerPage.js
-import React, { useState, useEffect } from "react";
-import { QrReader } from "react-qr-reader";
-import { useNavigate, useLocation } from "react-router-dom";
+// QRScannerPage.js
+import React, { useState } from "react";
+import QrReader from "react-qr-reader";
+import jsQR from "jsqr";
 
 const QRScannerPage = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
   const [qrContent, setQrContent] = useState("");
   const [uploadedImage, setUploadedImage] = useState(null);
-
-  useEffect(() => {
-    // Retrieve QR content from the query parameter
-    const qrContentFromQuery = new URLSearchParams(location.search).get(
-      "qrContent"
-    );
-    setQrContent(qrContentFromQuery);
-  }, [location.search]);
-
-  const handleScan = (data) => {
-    if (data) {
-      // Redirect to Payment Page with the scanned QR content
-      navigate(`/payment?qrContent=${data}`);
-    }
-  };
-
-  const handleError = (err) => {
-    console.error(err);
-  };
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -34,14 +13,39 @@ const QRScannerPage = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setUploadedImage(reader.result);
+        processImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const processImage = async (imageData) => {
+    const img = new Image();
+    img.src = imageData;
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, img.width, img.height);
+
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+      if (code) {
+        setQrContent(code.data);
+      } else {
+        setQrContent("QR code not found");
+      }
+    };
+  };
+
   return (
-    <div>
-      <h1>QR Scanner Page</h1>
+    <div className="qr-scanner-container">
+      <h1>QR Code Scanner</h1>
+
       <label htmlFor="qrImageUpload">Upload QR Image:</label>
       <input
         type="file"
@@ -49,19 +53,30 @@ const QRScannerPage = () => {
         onChange={handleFileUpload}
         id="qrImageUpload"
       />
-      <br />
+
       {uploadedImage && (
         <>
           <img
             src={uploadedImage}
             alt="Uploaded QR Image"
-            style={{ maxWidth: "100%" }}
+            className="uploaded-image"
           />
           <br />
         </>
       )}
-      {/* <QrReader delay={300} onError={handleError} onScan={handleScan} />
-      <p>{qrContent}</p> */}
+
+      {/* <QrReader
+        delay={300}
+        onError={(err) => console.error("QR Code Scanner Error:", err)}
+        onScan={(data) => {
+          if (data) {
+            setQrContent(data);
+          }
+        }}
+        style={{ width: "100%" }}
+      /> */}
+
+      {qrContent && <p>Scanned QR Content: {qrContent}</p>}
     </div>
   );
 };
