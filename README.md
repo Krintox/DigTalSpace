@@ -20,31 +20,34 @@ Deployed on Polygon MATIC, DigTalSpace is not just a social network; it's your c
 
 Choose from a variety of themes and avatars. Add multimedia content securely and craft a space that reflects your style.
 
-![Create & Personalize](images/geofencing.png)
+![Group 35562-min (1)](https://github.com/Krintox/DigTalSpace/assets/91776131/f6ae49ed-85e7-4661-ada1-080e742d42d6)
+
 
 ### Share & Connect 🔗
 
 Get a unique link for your space, connect with a global community, and engage in real-time chats and activities.
 
-![Share & Connect](images/geofencing.png)
+![Share and Connect](https://github.com/Krintox/DigTalSpace/assets/91776131/af984dbe-3772-43bb-92d8-35aa17ebf7eb)
 
 ### Geofencing Magic 🌍
 
 Activate geofencing to tie experiences to physical locations. Host exclusive events and connect with neighbors securely.
 
-![Geofencing Magic](images/geofencing.png)
+![Uploading Group 35563-min (1).png…]()
 
 ### QR Payments 💸
 
 Seamlessly integrate QR code payments for secure and transparent transactions. Monetize your space or support causes with ease.
 
-![QR Payments](images/qr-payments.png)
+![Profile](https://github.com/Krintox/DigTalSpace/assets/91776131/93369ddc-48e9-4657-84ba-e961ac6cdaf1)
+
 
 ### Unique Payment Links 🔗
 
 Generate unique links for personalized transactions. Share links for services, products, or to receive funds securely.
 
-![Unique Payment Links](images/unique-payment-links.png)
+![Group 35565](https://github.com/Krintox/DigTalSpace/assets/91776131/e55c1811-c45a-4225-a62a-f238393c67e2)
+
 
 ## Tech Stack
 
