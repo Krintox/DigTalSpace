@@ -9,6 +9,11 @@ import QRScannerPage from './components/QRScannerPage';
 import PaymentPage from './components/PaymentPage';
 import ProfilePage from './components/profilePage';
 import PageCreation from './components/createPage';
+import PaymentReceive from './components/PaymentReceive';
+import PaymentReceiveQR from './components/PaymentReceiveQR';
+import PaymentSend from './components/PaymentSend';
+import PaymentSendQR from './components/PaymentSendQR';
+import CheckWallet from './components/CheckWallet';
 import HomePage from './Home.js';
 import './App.css';
 
@@ -25,7 +30,11 @@ function App() {
           <Link to="/scanner-qr" className="nav-link">QR Scanner</Link>
           <Link to="/payment-page" className="nav-link">Payment Page</Link>
           <Link to="/profile-page" className="nav-link">Profile Page</Link>
-          <Link to="/PageCreation-page" className="nav-link">PageCreation Page</Link>
+          <Link to="/PaymentReceive" className="nav-link">PaymentReceive</Link>
+          {/* <Link to="/PaymentReceiveQR" className="nav-link">PaymentReceiveQR</Link> */}
+          <Link to="/PaymentSend" className="nav-link">PaymentSend</Link>
+          <Link to="/PaymentSendQR" className="nav-link">PaymentSendQR</Link>
+          <Link to="/CheckWallet" className="nav-link">CheckWallet</Link>
         </nav>
 
         <div className="content">
@@ -39,6 +48,11 @@ function App() {
             <Route path="/payment-page" element={<PaymentPage />} />
             <Route path="/profile-page" element={<ProfilePage />} />
             <Route path="/PageCreation-page" element={<PageCreation />} />
+            <Route path="/PaymentReceive" element={<PaymentReceive />} />
+            {/* <Route path="/PaymentReceiveQR" element={<PaymentReceiveQR />} /> */}
+            <Route path="/PaymentSend" element={<PaymentSend />} />
+            <Route path="/PaymentSendQR" element={<PaymentSendQR />} />
+            <Route path="/CheckWallet" element={<CheckWallet/>} />
           </Routes>
         </div>
       </div>
