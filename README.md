@@ -6,7 +6,7 @@ Welcome to DigTalSpace, where you craft your digital universe! 🌌
 
 ## What's DigTalSpace All About?
 
-DigTalSpace is not just a social network; it's your canvas for building a personalized digital world. Unleash your creativity and showcase your uniqueness!
+Deployed on Polygon MATIC, DigTalSpace is not just a social network; it's your canvas for building a personalized digital world. Unleash your creativity and showcase your uniqueness!
 
 ## Why Choose DigTalSpace?
 
@@ -45,6 +45,15 @@ Seamlessly integrate QR code payments for secure and transparent transactions. M
 Generate unique links for personalized transactions. Share links for services, products, or to receive funds securely.
 
 ![Unique Payment Links](images/unique-payment-links.png)
+
+## Tech Stack
+
+- **Frontend:** ReactJS
+- **Smart Contracts:** Solidity
+- **Development Tools:** Remix, Hardhat
+- **Blockchain Interaction:** Ethers.js
+
+DigTalSpace is deployed on Polygon MATIC.
 
 ## Getting Started
 
