@@ -1,6 +1,6 @@
 # DigTalSpace 🚀
 
-![DigTalSpace Logo](images/digtalspace-logo.png)
+![Logo](https://github.com/Krintox/DigTalSpace/assets/91776131/9315face-867e-4cc7-837c-00aeedc84d64)
 
 Welcome to DigTalSpace, where you craft your digital universe! 🌌
 
@@ -20,13 +20,13 @@ Deployed on Polygon MATIC, DigTalSpace is not just a social network; it's your c
 
 Choose from a variety of themes and avatars. Add multimedia content securely and craft a space that reflects your style.
 
-![Create and Personalize](images/create-personalize.png)
+![Create & Personalize](images/geofencing.png)
 
 ### Share & Connect 🔗
 
 Get a unique link for your space, connect with a global community, and engage in real-time chats and activities.
 
-![Share and Connect](images/share-connect.png)
+![Share & Connect](images/geofencing.png)
 
 ### Geofencing Magic 🌍
 
