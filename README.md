@@ -57,7 +57,7 @@ DigTalSpace is deployed on Polygon MATIC.
 
 ## Getting Started
 
-1. Clone the repository: `git clone https://github.com/your-username/DigTalSpace.git`
+1. Clone the repository: `git clone https://github.com/Krintox/DigTalSpace.git`
 2. Install dependencies: `npm install`
 3. Run the app: `npm start`
 
@@ -66,6 +66,5 @@ DigTalSpace is deployed on Polygon MATIC.
 - [Shashank Suggala](https://github.com/Krintox)
 - [Archit Patro](https://github.com/Archit-Patro)
 
-Ready to embark on a journey where your digital world mirrors your uniqueness? Join DigTalSpace – where creation knows no bounds! 🚀
 
 ![DigTalSpace Universe](images/digtalspace-universe.png)
