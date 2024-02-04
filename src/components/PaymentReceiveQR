@@ -1,0 +1,48 @@
+import React, { useState } from 'react';
+
+const QRGenerator = () => {
+  const [amount, setAmount] = useState('');
+  const [country, setCountry] = useState('');
+  const [transaction, setTransaction] = useState('');
+  const [cryptoCurrency, setCryptoCurrency] = useState('');
+  const [customCryptoCurrency, setCustomCryptoCurrency] = useState('');
+
+  const handleCryptoCurrencyChange = (e) => {
+    const selectedCryptoCurrency = e.target.value;
+    setCryptoCurrency(selectedCryptoCurrency);
+
+    // Reset customCryptoCurrency when a predefined crypto currency is selected
+    if (selectedCryptoCurrency !== 'custom') {
+      setCustomCryptoCurrency('');
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Add your QR code generation logic here
+  };
+
+  return (
+    <div className="container">
+      <form className="qr-form" onSubmit={handleSubmit}>
+
+        <label htmlFor="address">bitcoin:1355135VBHJ6779898HBBJKad...</label>
+        <textarea
+          id="address"
+          name="tranaddresssaction"
+          rows="4"
+          cols="50"
+          required
+          value={transaction}
+          onChange={(e) => setTransaction(e.target.value)}
+        ></textarea>
+
+        <button type="submit">Copy the address</button>
+        <button type="submit">Copy the QR</button>
+        <button type="submit">Done</button>
+      </form>
+    </div>
+  );
+};
+
+export default QRGenerator;
