@@ -11,6 +11,8 @@ import ProfilePage from './components/profilePage';
 import PageCreation from './components/createPage';
 import PaymentReceive from './components/PaymentReceive';
 import PaymentReceiveQR from './components/PaymentReceiveQR';
+import PaymentSend from './components/PaymentSend';
+import PaymentSendQR from './components/PaymentSendQR';
 import HomePage from './Home.js';
 import './App.css';
 
@@ -29,6 +31,8 @@ function App() {
           <Link to="/profile-page" className="nav-link">Profile Page</Link>
           <Link to="/PaymentReceive" className="nav-link">PaymentReceive</Link>
           {/* <Link to="/PaymentReceiveQR" className="nav-link">PaymentReceiveQR</Link> */}
+          <Link to="/PaymentSend" className="nav-link">PaymentSend</Link>
+          <Link to="/PaymentSendQR" className="nav-link">PaymentSendQR</Link>
         </nav>
 
         <div className="content">
@@ -44,6 +48,8 @@ function App() {
             <Route path="/PageCreation-page" element={<PageCreation />} />
             <Route path="/PaymentReceive" element={<PaymentReceive />} />
             {/* <Route path="/PaymentReceiveQR" element={<PaymentReceiveQR />} /> */}
+            <Route path="/PaymentSend" element={<PaymentSend />} />
+            <Route path="/PaymentSendQR" element={<PaymentSendQR />} />
           </Routes>
         </div>
       </div>
