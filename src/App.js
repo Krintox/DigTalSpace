@@ -23,17 +23,12 @@ function App() {
       <div className="App">
         <nav className="sidebar">
           <Link to="/" className="nav-link">Home</Link>
+          <Link to="/PageCreation-page" className="nav-link">Create Page</Link>
           <Link to="/digital-space" className="nav-link">Digital Space</Link>
           <Link to="/dynamic-qr" className="nav-link">Dynamic QR</Link>
           <Link to="/geofenced-payment" className="nav-link">Geofenced Payment</Link>
           <Link to="/short-payment-link" className="nav-link">Short Payment Link</Link>
           <Link to="/scanner-qr" className="nav-link">QR Scanner</Link>
-          <Link to="/payment-page" className="nav-link">Payment Page</Link>
-          <Link to="/profile-page" className="nav-link">Profile Page</Link>
-          <Link to="/PaymentReceive" className="nav-link">PaymentReceive</Link>
-          {/* <Link to="/PaymentReceiveQR" className="nav-link">PaymentReceiveQR</Link> */}
-          <Link to="/PaymentSend" className="nav-link">PaymentSend</Link>
-          <Link to="/PaymentSendQR" className="nav-link">PaymentSendQR</Link>
           <Link to="/CheckWallet" className="nav-link">CheckWallet</Link>
         </nav>
 

@@ -1,37 +1,44 @@
-// src/components/ShortPaymentLinkPage.js
+// ShortPaymentLinkPage.js
 import React, { useState } from "react";
-import { ethers } from "ethers";
+import { Link } from "react-router-dom";
 
-const ShortPaymentLinkPage = ({ contract }) => {
-  const [link, setLink] = useState("");
-  const [amount, setAmount] = useState("");
+const ShortPaymentLinkPage = () => {
+  const [paymentLink, setPaymentLink] = useState("");
 
-  const createLink = async () => {
-    const transaction = await contract.createLink(link, ethers.constants.AddressZero); // Replace with actual recipient
-    await transaction.wait();
-    alert("Link created!");
+  const generatePaymentLink = () => {
+    // Generate a random unique code for the payment link
+    const uniqueCode = generateRandomCode();
+
+    // Form the payment link URL
+    const link = `${uniqueCode}`;
+
+    // Update the state with the generated payment link
+    setPaymentLink(link);
   };
 
-  const getRecipient = async () => {
-    const recipient = await contract.getRecipient(link);
-    alert(`Recipient: ${recipient}`);
-  };
+  const generateRandomCode = () => {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const codeLength = 8; // Adjust the length of the unique code as needed
 
-  const initiateTransaction = async () => {
-    const transaction = await contract.initiateTransaction(link, ethers.utils.parseEther(amount)); // Use link as recipient for simplicity; replace with actual link and amount
-    await transaction.wait();
-    alert("Transaction initiated!");
+    let randomCode = "";
+    for (let i = 0; i < codeLength; i++) {
+      randomCode += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    return randomCode;
   };
 
   return (
     <div>
       <h1>Short Payment Link Page</h1>
-      <input type="text" value={link} onChange={(e) => setLink(e.target.value)} placeholder="Link" />
-      <button onClick={createLink}>Create Link</button>
-      <button onClick={getRecipient}>Get Recipient</button>
+      <button onClick={generatePaymentLink}>Generate My Payment Link</button>
       <br />
-      <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Amount (ETH)" />
-      <button onClick={initiateTransaction}>Initiate Transaction</button>
+      {paymentLink && (
+        <div>
+          <p>Your Payment Link:</p>
+          <Link to={`/${paymentLink}`}>{`http://localhost:3000/${paymentLink}`}</Link>
+        </div>
+      )}
     </div>
   );
 };

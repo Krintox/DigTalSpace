@@ -1,7 +1,7 @@
 // QRScannerPage.js
 import React, { useState } from "react";
-import QrReader from "react-qr-reader";
 import jsQR from "jsqr";
+import { ethers } from "ethers";
 
 const QRScannerPage = () => {
   const [qrContent, setQrContent] = useState("");
@@ -36,11 +36,109 @@ const QRScannerPage = () => {
 
       if (code) {
         setQrContent(code.data);
+        handlePayment(code.data);
       } else {
         setQrContent("QR code not found");
       }
     };
   };
+
+  const handlePayment = async (qrData) => {
+    try {
+      const { recipient, amount } = JSON.parse(decodeURIComponent(qrData));
+      console.log(recipient);
+      console.log(amount);
+  
+      // Assuming you have a contract with a pay function
+      const contractAddress = "0x7ae0Cbc6503ddE8344B95F100a3e01A98f6087bB"; // Replace with the actual contract address
+      const contractABI = [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "recipient",
+              "type": "address"
+            }
+          ],
+          "name": "pay",
+          "outputs": [],
+          "stateMutability": "payable",
+          "type": "function"
+        },
+        {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "recipient",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "PaymentSent",
+          "type": "event"
+        },
+        {
+          "inputs": [],
+          "name": "withdraw",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "name": "balances",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        }
+      ]
+  
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+  
+      const contract = new ethers.Contract(contractAddress, contractABI, signer);
+  
+      // Convert amount to Wei
+      const amountWei = ethers.utils.parseEther(amount);
+  
+      // Specify gas limit and gas price
+      const options = { value: amountWei, gasLimit: 300000, gasPrice: ethers.utils.parseUnits("20", "gwei") };
+  
+      // Wait for MetaMask to prompt user for transaction confirmation
+      await contract.pay(recipient, options);
+  
+      alert(`Payment of ${amount} ETH to ${recipient} initiated!`);
+    } catch (error) {
+      console.error("Error handling payment:", error);
+    }
+  };
+  
+  
 
   return (
     <div className="qr-scanner-container">
@@ -65,18 +163,7 @@ const QRScannerPage = () => {
         </>
       )}
 
-      {/* <QrReader
-        delay={300}
-        onError={(err) => console.error("QR Code Scanner Error:", err)}
-        onScan={(data) => {
-          if (data) {
-            setQrContent(data);
-          }
-        }}
-        style={{ width: "100%" }}
-      /> */}
-
-      {qrContent && <p>Scanned QR Content: {qrContent}</p>}
+      {/* {qrContent && <p>Scanned QR Content: {qrContent}</p>} */}
     </div>
   );
 };

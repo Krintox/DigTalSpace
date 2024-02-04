@@ -85,16 +85,23 @@ const CommunityPage = () => {
     }
   };
 
+  const containerStyle = {
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+  };
+
   return (
-    <div>
+    <div style={containerStyle}>
       <h1>Welcome to your Community Page</h1>
       <p>Owner: {page.owner}</p>
       <p>Content: {page.content}</p>
       <p>Unique Code: {page.uniqueCode}</p>
 
       {/* Display Avatar, Background Image, Background Audio */}
-      <img src={avatar} alt="Avatar" />
-      <img src={backgroundImage} alt="Background Image" />
+      {/* <img src={avatar} alt="Avatar" />
+      <img src={backgroundImage} alt="Background Image" /> */}
       <audio controls>
         <source src={backgroundAudio} type="audio/mpeg" />
         Your browser does not support the audio element.
